@@ -5,6 +5,12 @@
 
 echo "This script required to run as root"
 
+systemVersion=($(sw_vers -productVersion | cut -d "." -f 2))
+
+if [[ "${systemVersion}" -ge "15" ]]; then
+    sudo mount -uw / && killall Finder
+fi
+
 sudo curl -o "/tmp/localtime-toggle" "https://raw.githubusercontent.com/xiaoMGithub/LocalTime-Toggle/master/sbin/localtime-toggle"
 sudo curl -o "/tmp/org.osx86.localtime-toggle.plist" "https://raw.githubusercontent.com/xiaoMGithub/LocalTime-Toggle/master/Library/LaunchDaemons/org.osx86.localtime-toggle.plist"
 
