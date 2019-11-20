@@ -5,10 +5,11 @@
 
 echo "This script required to run as root"
 
-systemVersion=($(sw_vers -productVersion | cut -d "." -f 2))
-
-if [[ "${systemVersion}" -ge "15" ]]; then
-    sudo mount -uw / && killall Finder
+# check if the root filesystem is writeable (starting with macOS 10.15 Catalina, the root filesystem is read-only by default)
+if sudo test ! -w "/"; then
+    echo "Root filesystem is not writeable.  Remounting as read-write and restarting Finder."
+    sudo mount -uw /
+    sudo killall Finder
 fi
 
 sudo curl -o "/tmp/localtime-toggle" "https://raw.githubusercontent.com/xiaoMGithub/LocalTime-Toggle/master/sbin/localtime-toggle"
